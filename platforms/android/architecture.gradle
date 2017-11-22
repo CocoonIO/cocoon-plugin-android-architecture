@@ -1,16 +1,22 @@
 def getArchitecturePreference() {
-  def architecture = 'arm';
-  def file = file('res/xml/config.xml').getText()
-  def xml = new XmlParser(false, false).parseText(file)
+    def architecture = '';
+    def file = file('config.xml').getText()
+    def xml = new XmlParser(false, false).parseText(file)
 
-  xml.preference.each { it ->
-    def name = it.attribute('name')
-    if(name && name.toLowerCase() == 'buildarchitecture')
-      if(it.attribute('value') != null)
-        architecture = it.attribute('value')
-  }
+    xml.preference.each { it ->
+        def name = it.attribute('name')
+        if (name && name.toLowerCase() == 'android-architecture') {
+            if (it.attribute('value') != null) {
+                architecture = it.attribute('value')
+            }
+        }
+    }
 
-  return architecture;
+    return architecture;
 }
-ext.cdvBuildArch = getArchitecturePreference();
-ext.cdvBuildMultipleApks = true;
+
+def arch = getArchitecturePreference();
+if (arch != '') {
+    ext.cdvBuildArch = arch;
+    ext.cdvBuildMultipleApks = true;
+}
