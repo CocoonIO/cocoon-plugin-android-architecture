@@ -1,6 +1,6 @@
 def getArchitecturePreference() {
     def architecture = '';
-    def file = file('config.xml').getText()
+    def file = file('res/xml/config.xml').getText()
     def xml = new XmlParser(false, false).parseText(file)
 
     xml.preference.each { it ->
